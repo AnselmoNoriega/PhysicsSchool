@@ -1,6 +1,7 @@
 #pragma once
 #include "Visual/RenderingContext.h"
 #include "Visual/Visual.h"
+#include "Math/Camera.h"
 #include "Entity.h"
 
 namespace jm
@@ -21,7 +22,7 @@ namespace jm::System
 
 		Platform::MessageHandler* GetMessageHandler();
 
-		void Draw3D(math::vector3_f32 const& clearColour, std::function<void()>&& imguiFrame);
+		void Draw3D(math::camera3<f32> const& camera, math::vector3_f32 const& clearColour, std::function<void()>&& imguiFrame);
 
 	private:
 		Rendering::Context mRenderer;

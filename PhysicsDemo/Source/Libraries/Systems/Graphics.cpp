@@ -16,9 +16,11 @@ namespace jm::System
 
 		out vec3 outColour;
 
+		uniform mat4 projectionView;
+
 		void main()
 		{
-			gl_Position = vec4(inPosition, 1.0);
+			gl_Position = projectionView * vec4(inPosition, 1.0);
 			outColour = inColour;
 		}
 		)", R"(
@@ -60,10 +62,11 @@ namespace jm::System
 		return mRenderer.ImGuiContextPtr->GetMessageHandler();
 	}
 
-	void Graphics::Draw3D(math::vector3_f32 const& clearColour, std::function<void()>&& imguiFrame)
+	void Graphics::Draw3D(math::camera3<f32> const& camera, math::vector3_f32 const& clearColour, std::function<void()>&& imguiFrame)
 	{
 		mRenderer.RasterizerImpl->PrepareRenderBuffer(clearColour);
 
+		mProgram.SetUniform("projectionView", camera.get_perspective_transform() * camera.get_view_transform());
 		{
 			glBindVertexArray(static_cast<GLuint>(inputLayoutHandler));
 			GLsizei start = 0;

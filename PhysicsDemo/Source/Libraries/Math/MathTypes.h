@@ -6,6 +6,9 @@
 #define GLM_FORCE_SILENT_WARNINGS
 
 #include "glm/glm.hpp"
+#include "glm/gtx/matrix_operation.hpp"
+#include "glm/ext/matrix_transform.hpp"
+#include "glm/ext/matrix_clip_space.hpp"
 
 namespace jm::math
 {
@@ -110,5 +113,23 @@ namespace jm::math
 	V lerp(T t, V const& a, V const& b, V const& c, V const& d, V const& e)
 	{
 		return lerp(t, lerp(t, a, b, c, d), lerp(t, b, c, d, e));
+	}
+
+	template<typename T>
+	matrix44<T> translation_matrix3(vector3<T> const& translation)
+	{
+		return glm::translate(glm::identity<matrix44<T>>(), translation);
+	}
+
+	template<typename T>
+	matrix44<T> orthogonal_projection_matrix3(T left, T right, T buttom, T top, T zNear, T zFar)
+	{
+		return glm::orthoRH(left, right, buttom, top, zNear, zFar);
+	}
+
+	template<typename T>
+	matrix44<T> perspective_projection_matrix3(T yFOV, T aspectRatio, T zNear)
+	{
+		return glm::infinitePerspectiveRH(yFOV, aspectRatio, zNear);
 	}
 }

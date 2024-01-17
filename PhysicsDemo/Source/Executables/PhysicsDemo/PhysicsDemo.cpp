@@ -55,6 +55,8 @@ namespace jm
 		{
 			InputSystem.Update();
 
+			GraphicsSystem.Draw3D(Camera, ClearColour, []() {});
+
 			Running = !InputSystem.GetKeyboard().EscPressed;
 		}
 
