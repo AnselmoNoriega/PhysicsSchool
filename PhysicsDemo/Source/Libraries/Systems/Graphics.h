@@ -24,9 +24,12 @@ namespace jm::System
 		void Draw3D(math::vector3_f32 const& clearColour, std::function<void()>&& imguiFrame);
 
 	private:
-		Visual::ShaderProgram mProgram;
-
 		Rendering::Context mRenderer;
 		Entity_registry& mRegistry;
+
+		Visual::ShaderProgram mProgram;
+		OpenGL::InputLayoutHandle inputLayoutHandler;
+		OpenGL::InputBufferHandle inputBufferHandler;
+		GLsizei cubeVertices;
 	};
 }
