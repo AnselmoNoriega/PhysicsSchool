@@ -5,7 +5,7 @@
 #include "DearImGui/ImGuiContext.h"
 
 #include "OpenGL/OpenGL.h"
-
+#include "Visual/OpenGL/OpenGL.h"
 
 namespace jm
 {

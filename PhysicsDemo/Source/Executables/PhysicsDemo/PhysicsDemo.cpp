@@ -8,6 +8,9 @@
 
 #include "DearImGui/imgui.h"
 
+#include "Systems/Graphics.h"
+#include "Systems/Entity.h"
+
 namespace jm
 {
 	constexpr math::vector2<iSize> screenSize = { 1600, 900 };
@@ -34,7 +37,9 @@ namespace jm
 			: Platform::WindowedApplication(context, { "3D", { 50 , 50 }, { screenSize.x, screenSize.y } })
 			, Camera(Make3DCamera(10.0f, 45.0f, window->GetArea().GetAspectRatio()))
 			, ClearColour({ 0.2f, 0.3f, 0.3f })
+			, Registry()
 			, InputSystem()
+			, GraphicsSystem(*window, Registry)
 		{
 		}
 
@@ -42,6 +47,7 @@ namespace jm
 
 		virtual void OnStartLoop() override
 		{
+			AddMessageHandler(GraphicsSystem.GetMessageHandler());
 			AddMessageHandler(InputSystem.GetMessageHandler());
 		}
 
@@ -55,6 +61,7 @@ namespace jm
 		virtual void OnStopLoop() override
 		{
 			RemoveMessageHandler(InputSystem.GetMessageHandler());
+			RemoveMessageHandler(GraphicsSystem.GetMessageHandler());
 		}
 
 		void HandleException(const std::exception& applicationException)
@@ -62,10 +69,13 @@ namespace jm
 			JM_HALT("Application", applicationException.what());
 		}
 
+		Entity_registry Registry;
+
 		math::camera3<f32> Camera;
 		math::vector3_f32 ClearColour;
 
 		Tactual::System InputSystem;
+		System::Graphics GraphicsSystem;
 	};
 }
 
