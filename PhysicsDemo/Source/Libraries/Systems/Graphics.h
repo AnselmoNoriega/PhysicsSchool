@@ -32,5 +32,6 @@ namespace jm::System
 		OpenGL::InputLayoutHandle inputLayoutHandler;
 		OpenGL::InputBufferHandle inputBufferHandler;
 		GLsizei cubeVertices;
+		GLsizei exesVertices;
 	};
 }

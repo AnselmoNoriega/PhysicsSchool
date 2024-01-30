@@ -16,11 +16,12 @@ namespace jm::System
 
 		out vec3 outColour;
 
+		uniform mat4 model;
 		uniform mat4 projectionView;
 
 		void main()
 		{
-			gl_Position = projectionView * vec4(inPosition, 1.0);
+			gl_Position = projectionView * model * vec4(inPosition, 1.0);
 			outColour = inColour;
 		}
 		)", R"(
@@ -43,7 +44,12 @@ namespace jm::System
 			auto cubeVertexData = Visual::GenerateCube(layout);
 			inputVertexData.insert(inputVertexData.end(), cubeVertexData.data.begin(), cubeVertexData.data.end());
 			cubeVertices = static_cast<GLsizei>(cubeVertexData.size);
-		} 
+		}
+		{
+			auto axesData = Visual::GenerateCoordinateAxes3(layout);
+			inputVertexData.insert(axesData.end(), axesData.data.begin(), axesData.data.end());
+			axesVertices = static_cast<GLsizei>(axesData.size);
+		}
 
 		inputLayoutHandler = mRenderer.RasterizerMemory->createInputLayout(layout);
 		inputBufferHandler = mRenderer.RasterizerMemory->createInputBuffer(inputLayoutHandler, inputVertexData);
@@ -64,14 +70,30 @@ namespace jm::System
 
 	void Graphics::Draw3D(math::camera3<f32> const& camera, math::vector3_f32 const& clearColour, std::function<void()>&& imguiFrame)
 	{
+		auto spatial_shape_view = EntityRegistry.view<const spatial3_component>();
+
+		std::vector<math::matrix44_f32> CubeInstances;
+		for (auto&& [entity, spatial] : spatial_shape_view.each())
+		{
+			CubeInstances.push_back(math::translation_matrix3(spatial.position));
+		}
+
 		mRenderer.RasterizerImpl->PrepareRenderBuffer(clearColour);
 
 		mProgram.SetUniform("projectionView", camera.get_perspective_transform() * camera.get_view_transform());
 		{
-			glBindVertexArray(static_cast<GLuint>(inputLayoutHandler));
 			GLsizei start = 0;
+			glBindVertexArray(static_cast<GLuint>(inputLayoutHandler));
 
-			glDrawArrays(GL_TRIANGLES, start, cubeVertices);
+			for (math::matrix44_f32& instance : CubeInstances)
+			{
+				mProgram.SetUniform("model", instance);
+				glDrawArrays(GL_TRIANGLES, start, cubeVertices);
+			}
+			start += cubeVertices;
+
+			mProgram.SetUniform("model" math::identity4);
+			glDrawArrays(GL_LINES, start, axesVertices);
 		}
 
 		mRenderer.ImGuiContextPtr->RunFrame(std::move(imguiFrame));

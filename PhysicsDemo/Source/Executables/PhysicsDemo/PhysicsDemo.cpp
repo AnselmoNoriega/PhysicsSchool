@@ -37,10 +37,11 @@ namespace jm
 			: Platform::WindowedApplication(context, { "3D", { 50 , 50 }, { screenSize.x, screenSize.y } })
 			, Camera(Make3DCamera(10.0f, 45.0f, window->GetArea().GetAspectRatio()))
 			, ClearColour({ 0.2f, 0.3f, 0.3f })
-			, Registry()
+			, registry()
 			, InputSystem()
-			, GraphicsSystem(*window, Registry)
+			, GraphicsSystem(*window, registry)
 		{
+			Timer.Initialize();
 		}
 
 		virtual ~PhysicsDemo() override = default;
@@ -53,7 +54,9 @@ namespace jm
 
 		virtual void RunLoop() override
 		{
-			InputSystem.Update();
+			Timer.Update();
+
+			InputUpdate();
 
 			GraphicsSystem.Draw3D(Camera, ClearColour, []() {});
 
@@ -62,6 +65,8 @@ namespace jm
 
 		virtual void OnStopLoop() override
 		{
+			DestroyWorld();
+
 			RemoveMessageHandler(InputSystem.GetMessageHandler());
 			RemoveMessageHandler(GraphicsSystem.GetMessageHandler());
 		}
@@ -71,7 +76,51 @@ namespace jm
 			JM_HALT("Application", applicationException.what());
 		}
 
-		Entity_registry Registry;
+		void CreateWorldId()
+		{
+			entity_id entity0 = registry.create();
+
+			registry.emplace<spatial3_component>(entity0, math::vector3_f32{0.0f, 0.0f, 1.0f});
+
+			entity_id entity1 = registry.create();
+
+			registry.emplace<spatial3_component>(entity1, math::vector3_f32{1.0f, -3.0f, 1.0f});
+		}
+
+		void DestroyWorld()
+		{
+			registry.clear();
+		}
+
+		void InputUpdate()
+		{
+			const bool shiftPressed = InputSystem.GetKeyboard().ShiftPressed;
+			const float cameraTranslateSpeed = (shiftPressed ? 3.0f : 1.5f) * float(Timer.GetElapsedTime());
+			const float cameraRotateSpeed* float(Timer.GetElapsedTimer());
+
+			if (InputSystem.GetKeyboard().WPressed)
+			{
+				Camera.translate(cameraTranslateSpeed * Camera.get_forward());
+			}
+			if (InputSystem.GetKeyboard().SPressed)
+			{
+				Camera.translate(cameraTranslateSpeed * Camera.get_back());
+			}
+			if (InputSystem.GetKeyboard().APressed)
+			{
+				Camera.translate(cameraTranslateSpeed * Camera.get_left());
+			}
+			if (InputSystem.GetKeyboard().DPressed)
+			{
+				Camera.translate(cameraTranslateSpeed * Camera.Gget_right());
+			}
+
+			InputSystem.Update();
+		}
+
+		Platform::Timer timer;
+
+		Entity_registry registry;
 
 		math::camera3<f32> Camera;
 		math::vector3_f32 ClearColour;
