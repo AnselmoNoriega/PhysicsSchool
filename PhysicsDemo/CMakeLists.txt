@@ -154,6 +154,7 @@ set( MathSourceList
 "${MATH_MODULE_DIR}/MathDebug.h"
 "${MATH_MODULE_DIR}/Graph.h"
 "${MATH_MODULE_DIR}/Camera.h"
+"${MATH_MODULE_DIR}/Random.h"
 "${MATH_MODULE_DIR}/Random.cpp"
 )
 

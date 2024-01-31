@@ -1,3 +1,5 @@
+#include "Worlds.h"
+
 #include "Visual/RenderingContext.h"
 #include "Visual/DearImGui/ImGuiContext.h"
 
@@ -78,13 +80,7 @@ namespace jm
 
 		void CreateWorldId()
 		{
-			entity_id entity0 = registry.create();
-
-			registry.emplace<spatial3_component>(entity0, math::vector3_f32{0.0f, 0.0f, 1.0f});
-
-			entity_id entity1 = registry.create();
-
-			registry.emplace<spatial3_component>(entity1, math::vector3_f32{1.0f, -3.0f, 1.0f});
+			CreateBasicWorld();
 		}
 
 		void DestroyWorld()
@@ -96,7 +92,7 @@ namespace jm
 		{
 			const bool shiftPressed = InputSystem.GetKeyboard().ShiftPressed;
 			const float cameraTranslateSpeed = (shiftPressed ? 3.0f : 1.5f) * float(Timer.GetElapsedTime());
-			const float cameraRotateSpeed* float(Timer.GetElapsedTimer());
+			const float cameraRotateSpeed * float(Timer.GetElapsedTimer());
 
 			if (InputSystem.GetKeyboard().WPressed)
 			{
@@ -112,7 +108,23 @@ namespace jm
 			}
 			if (InputSystem.GetKeyboard().DPressed)
 			{
-				Camera.translate(cameraTranslateSpeed * Camera.Gget_right());
+				Camera.translate(cameraTranslateSpeed * Camera.get_right());
+			}
+			if (InputSystem.GetKeyboard().UpPressed)
+			{
+				Camera.rotate(0.0f, cameraRotateSpeed);
+			}
+			if (InputSystem.GetKeyboard().DownPressed)
+			{
+				Camera.rotate(0.0f, -cameraRotateSpeed);
+			}
+			if (InputSystem.GetKeyboard().LeftPressed)
+			{
+				Camera.rotate(-cameraRotateSpeed, 0.0f);
+			}
+			if (InputSystem.GetKeyboard().LeftPressed)
+			{
+				Camera.rotate(cameraRotateSpeed, 0.0f);
 			}
 
 			InputSystem.Update();

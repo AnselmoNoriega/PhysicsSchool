@@ -82,6 +82,9 @@ namespace jm::math
 
 	using glm::length;
 	using glm::radians;
+	using glm::angles;
+	using glm::axis;
+	using glm::anglesAxis;
 
 	template<typename T>
 	vector3<T> cartesian_from_spherical(T radius, T theta, T phi)
