@@ -3,6 +3,7 @@
 #include "Platform/WindowedApplication.h"
 #include "Visual/DearImGui/ImGuiContext.h"
 #include "Visual/VisualGeometry.h"
+//#include "Systems/"
 
 namespace jm::System
 {
@@ -47,7 +48,7 @@ namespace jm::System
 		}
 		{
 			auto axesData = Visual::GenerateCoordinateAxes3(layout);
-			inputVertexData.insert(axesData.end(), axesData.data.begin(), axesData.data.end());
+			inputVertexData.insert(inputVertexData.end(), axesData.data.begin(), axesData.data.end());
 			axesVertices = static_cast<GLsizei>(axesData.size);
 		}
 
@@ -70,7 +71,7 @@ namespace jm::System
 
 	void Graphics::Draw3D(math::camera3<f32> const& camera, math::vector3_f32 const& clearColour, std::function<void()>&& imguiFrame)
 	{
-		auto spatial_shape_view = EntityRegistry.view<const spatial3_component>();
+		auto spatial_shape_view = mRegistry.view<const spatial3_component>();
 
 		std::vector<math::matrix44_f32> CubeInstances;
 		for (auto&& [entity, spatial] : spatial_shape_view.each())
@@ -92,7 +93,7 @@ namespace jm::System
 			}
 			start += cubeVertices;
 
-			mProgram.SetUniform("model" math::identity4);
+			mProgram.SetUniform("model", math::identity4);
 			glDrawArrays(GL_LINES, start, axesVertices);
 		}
 

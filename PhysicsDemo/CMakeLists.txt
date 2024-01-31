@@ -231,6 +231,8 @@ target_link_libraries(Systems PUBLIC Math Platform Visual entt)
 set(PHYSICSDEMO_MODULE_DIR "${EXECUTABLES_PATH}/PhysicsDemo")
 set( PhysicsDemoSourceList
 	"${PHYSICSDEMO_MODULE_DIR}/PhysicsDemo.cpp"
+	"${PHYSICSDEMO_MODULE_DIR}/Worlds.cpp"
+	"${PHYSICSDEMO_MODULE_DIR}/Worlds.h"
 )
 
 add_executable(PhysicsDemo ${PhysicsDemoSourceList})
