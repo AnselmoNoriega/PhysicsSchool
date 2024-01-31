@@ -156,6 +156,7 @@ set( MathSourceList
 "${MATH_MODULE_DIR}/Camera.h"
 "${MATH_MODULE_DIR}/Random.h"
 "${MATH_MODULE_DIR}/Random.cpp"
+"${MATH_MODULE_DIR}/Geometry.cpp"
 )
 
 add_library(Math ${MathSourceList})
@@ -213,6 +214,8 @@ set( SystemsSourceList
 "${SYSTEMS_MODULE_DIR}/Graphics.h"
 "${SYSTEMS_MODULE_DIR}/Entity.cpp"
 "${SYSTEMS_MODULE_DIR}/Entity.h"
+"${SYSTEMS_MODULE_DIR}/Collision.cpp"
+"${SYSTEMS_MODULE_DIR}/Collision.h"
 )
 
 add_library(Systems ${SystemsSourceList})
