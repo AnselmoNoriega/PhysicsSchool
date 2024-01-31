@@ -85,10 +85,10 @@ namespace jm::System
 			switch (shape)
 			{
 			case shape_component::sphere:
-				SphereInstances.push_back(math::translation_matrix3(spatial.position));
+				SphereInstances.push_back(math::isometry_matrix3(spatial.position, spatial.rptation));
 				break;
 			default:
-				CubeInstances.push_back(math::translation_matrix3(spatial.position));
+				CubeInstances.push_back(math::isometry_matrix3(spatial.position, spatial.rptation));
 				break;
 			}
 

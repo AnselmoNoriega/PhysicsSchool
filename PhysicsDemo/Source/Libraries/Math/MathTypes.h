@@ -84,7 +84,7 @@ namespace jm::math
 	using glm::radians;
 	using glm::angles;
 	using glm::axis;
-	using glm::anglesAxis;
+	using glm::anglesAxis;	
 
 	template<typename T>
 	vector3<T> cartesian_from_spherical(T radius, T theta, T phi)
@@ -126,6 +126,13 @@ namespace jm::math
 	matrix44<T> translation_matrix3(vector3<T> const& translation)
 	{
 		return glm::translate(glm::identity<matrix44<T>>(), translation);
+	}
+
+	template<typename T>
+	matrix44<T> isometry_matrix3(vector3<T> const& translation, quaternion<T> const& rotation)
+	{
+		matrix44<T> rotation_matrix = glm::mat3_cast(rotation);
+		return glm::translate(rotation_matrix, translation);
 	}
 
 	template<typename T>
