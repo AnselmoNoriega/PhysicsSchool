@@ -1,4 +1,4 @@
-﻿cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
+﻿﻿cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
@@ -154,9 +154,9 @@ set( MathSourceList
 "${MATH_MODULE_DIR}/MathDebug.h"
 "${MATH_MODULE_DIR}/Graph.h"
 "${MATH_MODULE_DIR}/Camera.h"
-"${MATH_MODULE_DIR}/Random.h"
 "${MATH_MODULE_DIR}/Random.cpp"
-"${MATH_MODULE_DIR}/Geometry.cpp"
+"${MATH_MODULE_DIR}/Random.h"
+"${MATH_MODULE_DIR}/Physics.h"
 )
 
 add_library(Math ${MathSourceList})
@@ -185,9 +185,9 @@ set( VisualSourceList
 "${VISUAL_MODULE_DIR}/RenderingContext.cpp"
 "${VISUAL_MODULE_DIR}/RenderingContext.h"
 "${VISUAL_MODULE_DIR}/Visual.cpp"
-"${VISUAL_MODULE_DIR}/Visual.h"
-"${VISUAL_MODULE_DIR}/VisualGeometry.cpp"
 "${VISUAL_MODULE_DIR}/VisualGeometry.h"
+"${VISUAL_MODULE_DIR}/VisualGeometry.cpp"
+"${VISUAL_MODULE_DIR}/Visual.h"
 "${VISUAL_MODULE_DIR}/VisualDebug.h"
 "${VISUAL_MODULE_DIR}/MeshData.cpp"
 )
@@ -214,8 +214,9 @@ set( SystemsSourceList
 "${SYSTEMS_MODULE_DIR}/Graphics.h"
 "${SYSTEMS_MODULE_DIR}/Entity.cpp"
 "${SYSTEMS_MODULE_DIR}/Entity.h"
-"${SYSTEMS_MODULE_DIR}/Collision.cpp"
+"${SYSTEMS_MODULE_DIR}/Components.h"
 "${SYSTEMS_MODULE_DIR}/Collision.h"
+"${SYSTEMS_MODULE_DIR}/Collision.cpp"
 )
 
 add_library(Systems ${SystemsSourceList})
@@ -228,15 +229,14 @@ set_target_properties(Systems PROPERTIES
 )
 target_link_libraries(Systems PUBLIC Math Platform Visual entt)
 
-
 #=======================#====EXECUTABLES=====#=======================
 #=======================PhysicsDemo
 
 set(PHYSICSDEMO_MODULE_DIR "${EXECUTABLES_PATH}/PhysicsDemo")
 set( PhysicsDemoSourceList
 	"${PHYSICSDEMO_MODULE_DIR}/PhysicsDemo.cpp"
-	"${PHYSICSDEMO_MODULE_DIR}/Worlds.cpp"
-	"${PHYSICSDEMO_MODULE_DIR}/Worlds.h"
+	"${PHYSICSDEMO_MODULE_DIR}/World.cpp"
+	"${PHYSICSDEMO_MODULE_DIR}/World.h"
 )
 
 add_executable(PhysicsDemo ${PhysicsDemoSourceList})

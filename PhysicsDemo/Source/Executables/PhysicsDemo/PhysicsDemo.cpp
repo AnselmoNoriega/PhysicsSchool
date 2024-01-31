@@ -1,4 +1,4 @@
-#include "Worlds.h"
+#include "World.h"
 
 #include "Visual/RenderingContext.h"
 #include "Visual/DearImGui/ImGuiContext.h"
@@ -8,10 +8,11 @@
 #include "Platform/Tactual.h"
 #include "Platform/WindowedApplication.h"
 
-#include "DearImGui/imgui.h"
-
-#include "Systems/Graphics.h"
 #include "Systems/Entity.h"
+#include "Systems/Graphics.h"
+#include "Systems/Components.h"
+
+#include "DearImGui/imgui.h"
 
 namespace jm
 {
@@ -52,12 +53,13 @@ namespace jm
 		{
 			AddMessageHandler(GraphicsSystem.GetMessageHandler());
 			AddMessageHandler(InputSystem.GetMessageHandler());
+
+			CreateWorld();
 		}
 
 		virtual void RunLoop() override
 		{
 			Timer.Update();
-
 			InputUpdate();
 
 			GraphicsSystem.Draw3D(Camera, ClearColour, []() {});
@@ -78,9 +80,9 @@ namespace jm
 			JM_HALT("Application", applicationException.what());
 		}
 
-		void CreateWorldId()
+		void CreateWorld()
 		{
-			CreateBasicWorld();
+			CreateBasicWorld(registry);
 		}
 
 		void DestroyWorld()
@@ -91,24 +93,24 @@ namespace jm
 		void InputUpdate()
 		{
 			const bool shiftPressed = InputSystem.GetKeyboard().ShiftPressed;
-			const float cameraTranslateSpeed = (shiftPressed ? 3.0f : 1.5f) * float(Timer.GetElapsedTime());
-			const float cameraRotateSpeed * float(Timer.GetElapsedTimer());
+			const float cameraTranslatSpeed = (shiftPressed ? 3.0f : 1.5f) * float(Timer.GetElapsedTime());
+			const float cameraRotateSpeed = float(Timer.GetElapsedTime());
 
 			if (InputSystem.GetKeyboard().WPressed)
 			{
-				Camera.translate(cameraTranslateSpeed * Camera.get_forward());
+				Camera.translate(cameraTranslatSpeed * Camera.get_forward());
 			}
 			if (InputSystem.GetKeyboard().SPressed)
 			{
-				Camera.translate(cameraTranslateSpeed * Camera.get_back());
+				Camera.translate(cameraTranslatSpeed * Camera.get_back());
 			}
 			if (InputSystem.GetKeyboard().APressed)
 			{
-				Camera.translate(cameraTranslateSpeed * Camera.get_left());
+				Camera.translate(cameraTranslatSpeed * Camera.get_left());
 			}
 			if (InputSystem.GetKeyboard().DPressed)
 			{
-				Camera.translate(cameraTranslateSpeed * Camera.get_right());
+				Camera.translate(cameraTranslatSpeed * Camera.get_right());
 			}
 			if (InputSystem.GetKeyboard().UpPressed)
 			{
@@ -118,21 +120,20 @@ namespace jm
 			{
 				Camera.rotate(0.0f, -cameraRotateSpeed);
 			}
+			if (InputSystem.GetKeyboard().RightPressed)
+			{
+				Camera.rotate(cameraRotateSpeed, 0.0f);
+			}
 			if (InputSystem.GetKeyboard().LeftPressed)
 			{
 				Camera.rotate(-cameraRotateSpeed, 0.0f);
 			}
-			if (InputSystem.GetKeyboard().LeftPressed)
-			{
-				Camera.rotate(cameraRotateSpeed, 0.0f);
-			}
 
 			InputSystem.Update();
 		}
+		Platform::Timer Timer;
 
-		Platform::Timer timer;
-
-		Entity_registry registry;
+		entity_registry registry;
 
 		math::camera3<f32> Camera;
 		math::vector3_f32 ClearColour;

@@ -1,6 +1,7 @@
 #pragma once
+#include "Systems/Entity.h"
 
 namespace jm
 {
-	void CreateBasicWorldId(entity_registry& registry);
+    void CreateBasicWorld(entity_registry& registry);
 }

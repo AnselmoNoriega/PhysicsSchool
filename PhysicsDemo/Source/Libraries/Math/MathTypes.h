@@ -1,5 +1,4 @@
 #pragma once
-
 #include "MathDebug.h"
 #include "Platform/PlatformCore.h"
 
@@ -9,6 +8,7 @@
 #include "glm/gtx/matrix_operation.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/ext/matrix_clip_space.hpp"
+#include "glm/gtx/quaternion.hpp"
 
 namespace jm::math
 {
@@ -19,6 +19,8 @@ namespace jm::math
 	using matrix22_f32 = glm::f32mat2x2;
 	using matrix33_f32 = glm::f32mat3x3;
 	using matrix44_f32 = glm::f32mat4x4;
+
+	using quaternion_f32 = glm::f32quat;
 
 	using colour3_f32 = vector3_f32;
 
@@ -40,6 +42,9 @@ namespace jm::math
 	using matrix33 = glm::tmat3x3<T>;
 	template <typename T>
 	using matrix44 = glm::tmat4x4<T>;
+
+	template <typename T>
+	using quaternion = glm::tquat<T>;
 
 #define JM_DefineArithmeticScalarConstant(name, fxn) \
 	template <typename T> \
@@ -74,19 +79,21 @@ namespace jm::math
 	constexpr vector2_f32 zero2{ 0.f };
 	constexpr vector3_f32 zero3{ 0.f };
 
-	constexpr matrix22_f32 identity2 = glm::identity<matrix22_f32>();
-	constexpr matrix33_f32 identity3 = glm::identity<matrix33_f32>();
+	constexpr matrix44_f32 identity2 = glm::identity<matrix22_f32>();
+	constexpr matrix44_f32 identity3 = glm::identity<matrix33_f32>();
 	constexpr matrix44_f32 identity4 = glm::identity<matrix44_f32>();
+
+	constexpr quaternion_f32 identityH = glm::quat_identity<f32, glm::defaultp>();
 
 	constexpr f32 epsilon_f32 = math::epsilon<f32>();
 
 	using glm::length;
 	using glm::radians;
-	using glm::angles;
+	using glm::angle;
 	using glm::axis;
-	using glm::anglesAxis;	
+	using glm::angleAxis;
 
-	template<typename T>
+	template <typename T>
 	vector3<T> cartesian_from_spherical(T radius, T theta, T phi)
 	{
 		return radius * vector3<T>(sin(phi) * sin(theta), cos(phi), sin(phi) * cos(theta));
@@ -98,51 +105,51 @@ namespace jm::math
 		return std::acos(dot(a, b) / (length(a) * length(b)));
 	}
 
-	template<typename T, typename V>
+	template <typename T, typename V>
 	V lerp(T t, V const& a, V const& b)
 	{
 		return t * b + (T(1) - t) * a;
 	}
 
-	template<typename T, typename V>
+	template <typename T, typename V>
 	V lerp(T t, V const& a, V const& b, V const& c)
 	{
 		return lerp(t, lerp(t, a, b), lerp(t, b, c));
 	}
 
-	template<typename T, typename V>
+	template <typename T, typename V>
 	V lerp(T t, V const& a, V const& b, V const& c, V const& d)
 	{
 		return lerp(t, lerp(t, a, b, c), lerp(t, b, c, d));
 	}
 
-	template<typename T, typename V>
+	template <typename T, typename V>
 	V lerp(T t, V const& a, V const& b, V const& c, V const& d, V const& e)
 	{
 		return lerp(t, lerp(t, a, b, c, d), lerp(t, b, c, d, e));
 	}
 
-	template<typename T>
+	template <typename T>
 	matrix44<T> translation_matrix3(vector3<T> const& translation)
 	{
 		return glm::translate(glm::identity<matrix44<T>>(), translation);
 	}
 
-	template<typename T>
+	template <typename T>
 	matrix44<T> isometry_matrix3(vector3<T> const& translation, quaternion<T> const& rotation)
 	{
-		matrix44<T> rotation_matrix = glm::mat3_cast(rotation);
-		return glm::translate(rotation_matrix, translation);
+		matrix44<T> rotationMatrix = glm::mat3_cast(rotation);
+		return glm::translate(rotationMatrix, translation);
 	}
 
-	template<typename T>
-	matrix44<T> orthogonal_projection_matrix3(T left, T right, T buttom, T top, T zNear, T zFar)
+	template <typename T>
+	matrix44<T> orthogonal_projection_matrix(T left, T right, T bottom, T top, T zNear, T zFar)
 	{
-		return glm::orthoRH(left, right, buttom, top, zNear, zFar);
+		return glm::orthoRH(left, right, bottom, top, zNear, zFar);
 	}
 
-	template<typename T>
-	matrix44<T> perspective_projection_matrix3(T yFOV, T aspectRatio, T zNear)
+	template <typename T>
+	matrix44<T> perspective_projection_matrix(T yFOV, T aspectRatio, T zNear)
 	{
 		return glm::infinitePerspectiveRH(yFOV, aspectRatio, zNear);
 	}
