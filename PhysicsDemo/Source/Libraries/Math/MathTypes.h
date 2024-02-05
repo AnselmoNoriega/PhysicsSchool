@@ -79,8 +79,8 @@ namespace jm::math
 	constexpr vector2_f32 zero2{ 0.f };
 	constexpr vector3_f32 zero3{ 0.f };
 
-	constexpr matrix44_f32 identity2 = glm::identity<matrix22_f32>();
-	constexpr matrix44_f32 identity3 = glm::identity<matrix33_f32>();
+	constexpr matrix22_f32 identity2 = glm::identity<matrix22_f32>();
+	constexpr matrix33_f32 identity3 = glm::identity<matrix33_f32>();
 	constexpr matrix44_f32 identity4 = glm::identity<matrix44_f32>();
 
 	constexpr quaternion_f32 identityH = glm::quat_identity<f32, glm::defaultp>();
@@ -93,62 +93,62 @@ namespace jm::math
 	using glm::axis;
 	using glm::angleAxis;
 
-	template <typename T>
+	template<typename T>
 	vector3<T> cartesian_from_spherical(T radius, T theta, T phi)
 	{
 		return radius * vector3<T>(sin(phi) * sin(theta), cos(phi), sin(phi) * cos(theta));
 	}
 
-	template <size_t D, typename T>
+	template<size_t D, typename T>
 	T angle(vectorN<D, T> const& a, vectorN<D, T> const& b)
 	{
 		return std::acos(dot(a, b) / (length(a) * length(b)));
 	}
 
-	template <typename T, typename V>
+	template<typename T, typename V>
 	V lerp(T t, V const& a, V const& b)
 	{
 		return t * b + (T(1) - t) * a;
 	}
 
-	template <typename T, typename V>
+	template<typename T, typename V>
 	V lerp(T t, V const& a, V const& b, V const& c)
 	{
 		return lerp(t, lerp(t, a, b), lerp(t, b, c));
 	}
 
-	template <typename T, typename V>
+	template<typename T, typename V>
 	V lerp(T t, V const& a, V const& b, V const& c, V const& d)
 	{
 		return lerp(t, lerp(t, a, b, c), lerp(t, b, c, d));
 	}
 
-	template <typename T, typename V>
+	template<typename T, typename V>
 	V lerp(T t, V const& a, V const& b, V const& c, V const& d, V const& e)
 	{
 		return lerp(t, lerp(t, a, b, c, d), lerp(t, b, c, d, e));
 	}
 
-	template <typename T>
+	template<typename T>
 	matrix44<T> translation_matrix3(vector3<T> const& translation)
 	{
 		return glm::translate(glm::identity<matrix44<T>>(), translation);
 	}
 
-	template <typename T>
+	template<typename T>
 	matrix44<T> isometry_matrix3(vector3<T> const& translation, quaternion<T> const& rotation)
 	{
 		matrix44<T> rotationMatrix = glm::mat3_cast(rotation);
 		return glm::translate(rotationMatrix, translation);
 	}
 
-	template <typename T>
+	template<typename T>
 	matrix44<T> orthogonal_projection_matrix(T left, T right, T bottom, T top, T zNear, T zFar)
 	{
 		return glm::orthoRH(left, right, bottom, top, zNear, zFar);
 	}
 
-	template <typename T>
+	template<typename T>
 	matrix44<T> perspective_projection_matrix(T yFOV, T aspectRatio, T zNear)
 	{
 		return glm::infinitePerspectiveRH(yFOV, aspectRatio, zNear);
