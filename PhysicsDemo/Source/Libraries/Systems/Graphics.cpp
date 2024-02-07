@@ -48,7 +48,7 @@ namespace jm::System
 			cubeVertices = static_cast<GLsizei>(cubeVertexData.size);
 		}
 		{
-			auto sphereVertexData = Visual::GenerateCube(layout);
+			auto sphereVertexData = Visual::GenerateSphere(layout);
 			inputVertexData.insert(inputVertexData.end(), sphereVertexData.data.begin(), sphereVertexData.data.end());
 			sphereVertices = static_cast<GLsizei>(sphereVertexData.size);
 		}
