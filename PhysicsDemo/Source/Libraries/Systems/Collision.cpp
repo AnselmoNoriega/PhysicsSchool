@@ -6,16 +6,23 @@ namespace jm
 {
     struct SphereCollider
     {
-        entity_id entity;
+        Entity_id entity;
         math::sphere3<f32> sphere;
     };
+
     struct BoxCollider
     {
-        entity_id entity;
+        Entity_id entity;
         math::box3<f32> box;
     };
 
-    void resolve_collisions(entity_registry& registry)
+    struct ColliderSet
+    {
+        std::vector<SphereCollider> spheres;
+        std::vector<BoxCollider> boxes;
+    };
+
+    void resolve_collisions(Entity_registry& registry)
     {
         auto shape_entity_view = registry.view<const shape_component, const spatial3_component>();
 

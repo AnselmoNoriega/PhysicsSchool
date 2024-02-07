@@ -1,4 +1,4 @@
-#include "World.h"
+#include "Worlds.h"
 
 #include "Visual/RenderingContext.h"
 #include "Visual/DearImGui/ImGuiContext.h"
@@ -133,7 +133,7 @@ namespace jm
 		}
 		Platform::Timer Timer;
 
-		entity_registry registry;
+		Entity_registry registry;
 
 		math::camera3<f32> Camera;
 		math::vector3_f32 ClearColour;

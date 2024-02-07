@@ -3,5 +3,5 @@
 
 namespace jm
 {
-    void resolve_collisions(entity_registry& registry);
+    void resolve_collisions(Entity_registry& registry);
 }

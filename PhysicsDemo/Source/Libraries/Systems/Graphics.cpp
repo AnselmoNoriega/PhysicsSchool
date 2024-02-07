@@ -3,6 +3,7 @@
 #include "Platform/WindowedApplication.h"
 #include "Visual/DearImGui/ImGuiContext.h"
 #include "Visual/VisualGeometry.h"
+#include "Components.h"
 //#include "Systems/"
 
 namespace jm::System
@@ -84,14 +85,13 @@ namespace jm::System
 		{
 			switch (shape)
 			{
-			case shape_component::sphere:
-				SphereInstances.push_back(math::isometry_matrix3(spatial.position, spatial.rptation));
+			case shape_component::Sphere:
+				SphereInstances.push_back(math::isometry_matrix3(spatial.position, spatial.rotation));
 				break;
 			default:
-				CubeInstances.push_back(math::isometry_matrix3(spatial.position, spatial.rptation));
+				CubeInstances.push_back(math::isometry_matrix3(spatial.position, spatial.rotation));
 				break;
 			}
-
 		}
 
 		mRenderer.RasterizerImpl->PrepareRenderBuffer(clearColour);

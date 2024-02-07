@@ -1,4 +1,4 @@
-﻿﻿cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
+﻿cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
@@ -154,9 +154,9 @@ set( MathSourceList
 "${MATH_MODULE_DIR}/MathDebug.h"
 "${MATH_MODULE_DIR}/Graph.h"
 "${MATH_MODULE_DIR}/Camera.h"
+"${MATH_MODULE_DIR}/Random.cpp"
 "${MATH_MODULE_DIR}/Random.h"
 "${MATH_MODULE_DIR}/Physics.h"
-"${MATH_MODULE_DIR}/Random.cpp"
 )
 
 add_library(Math ${MathSourceList})
@@ -185,9 +185,9 @@ set( VisualSourceList
 "${VISUAL_MODULE_DIR}/RenderingContext.cpp"
 "${VISUAL_MODULE_DIR}/RenderingContext.h"
 "${VISUAL_MODULE_DIR}/Visual.cpp"
+"${VISUAL_MODULE_DIR}/Visual.h"
 "${VISUAL_MODULE_DIR}/VisualGeometry.h"
 "${VISUAL_MODULE_DIR}/VisualGeometry.cpp"
-"${VISUAL_MODULE_DIR}/Visual.h"
 "${VISUAL_MODULE_DIR}/VisualDebug.h"
 "${VISUAL_MODULE_DIR}/MeshData.cpp"
 )
@@ -207,7 +207,6 @@ set_target_properties(Visual PROPERTIES
 target_link_libraries(Visual PUBLIC Math Platform ImGui)
 
 #=======================Systems
-
 set(SYSTEMS_MODULE_DIR "${LIB_PATH}/Systems")
 set( SystemsSourceList
 "${SYSTEMS_MODULE_DIR}/Graphics.cpp"
@@ -218,7 +217,6 @@ set( SystemsSourceList
 "${SYSTEMS_MODULE_DIR}/Collision.h"
 "${SYSTEMS_MODULE_DIR}/Collision.cpp"
 )
-
 add_library(Systems ${SystemsSourceList})
 target_include_directories(Systems PUBLIC "${SYSTEMS_MODULE_DIR}")
 target_compile_features(Systems PUBLIC cxx_std_20)

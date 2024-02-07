@@ -3,5 +3,5 @@
 
 namespace jm
 {
-    void CreateBasicWorld(entity_registry& registry);
+    void CreateBasicWorld(Entity_registry& registry);
 }
