@@ -154,9 +154,9 @@ set( MathSourceList
 "${MATH_MODULE_DIR}/MathDebug.h"
 "${MATH_MODULE_DIR}/Graph.h"
 "${MATH_MODULE_DIR}/Camera.h"
-"${MATH_MODULE_DIR}/Random.cpp"
 "${MATH_MODULE_DIR}/Random.h"
 "${MATH_MODULE_DIR}/Physics.h"
+"${MATH_MODULE_DIR}/Random.cpp"
 )
 
 add_library(Math ${MathSourceList})
@@ -235,8 +235,8 @@ target_link_libraries(Systems PUBLIC Math Platform Visual entt)
 set(PHYSICSDEMO_MODULE_DIR "${EXECUTABLES_PATH}/PhysicsDemo")
 set( PhysicsDemoSourceList
 	"${PHYSICSDEMO_MODULE_DIR}/PhysicsDemo.cpp"
-	"${PHYSICSDEMO_MODULE_DIR}/World.cpp"
-	"${PHYSICSDEMO_MODULE_DIR}/World.h"
+	"${PHYSICSDEMO_MODULE_DIR}/Worlds.cpp"
+	"${PHYSICSDEMO_MODULE_DIR}/Worlds.h"
 )
 
 add_executable(PhysicsDemo ${PhysicsDemoSourceList})
