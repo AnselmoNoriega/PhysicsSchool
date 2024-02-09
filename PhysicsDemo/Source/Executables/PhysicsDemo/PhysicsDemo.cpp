@@ -62,6 +62,8 @@ namespace jm
 			Timer.Update();
 			InputUpdate();
 
+			Colliders = build_coliders(registry);
+
 			GraphicsSystem.Draw3D(Camera, ClearColour, []() {});
 
 			Running = !InputSystem.GetKeyboard().EscPressed;
@@ -137,6 +139,7 @@ namespace jm
 
 		math::camera3<f32> Camera;
 		math::vector3_f32 ClearColour;
+		ColliderSet Colliders;
 
 		Tactual::System InputSystem;
 		System::Graphics GraphicsSystem;
