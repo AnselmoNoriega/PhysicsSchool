@@ -21,8 +21,13 @@ namespace jm::System
 		~Graphics();
 
 		Platform::MessageHandler* GetMessageHandler();
+		void ImGuiDebug();
 
 		void Draw3D(math::camera3<f32> const& camera, math::vector3_f32 const& clearColour, std::function<void()>&& imguiFrame);
+
+		math::vector3_f32 ClearColour;
+		bool Debug3D = true;
+		bool Debug2D = false;
 
 	private:
 		Rendering::Context mRenderer;

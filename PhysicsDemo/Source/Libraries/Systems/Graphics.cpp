@@ -4,7 +4,7 @@
 #include "Visual/DearImGui/ImGuiContext.h"
 #include "Visual/VisualGeometry.h"
 #include "Components.h"
-//#include "Systems/"
+#include "imgui.h"
 
 namespace jm::System
 {
@@ -37,7 +37,8 @@ namespace jm::System
 		{
 			FragColor = vec4(outColour, 1.0);
 		}
-		)")
+		)"),
+		ClearColour({ 0.2f, 0.3f, 0.3f })
 	{
 		Visual::InputLayout layout{ {3, 3} };
 
@@ -122,5 +123,13 @@ namespace jm::System
 		mRenderer.ImGuiContextPtr->RunFrame(std::move(imguiFrame));
 
 		mRenderer.RasterizerImpl->UpdateRenderBuffer();
+	}
+
+	void Graphics::ImGuiDebug()
+	{
+		ImGui::Text("Graphics");
+		ImGui::ColorEdit3("BG Colour", reinterpret_cast<f32*>(&ClearColour));
+		ImGui::Checkbox("Debug 2D", &Debug2D);
+		ImGui::Checkbox("Debug 3D", &Debug3D);
 	}
 }
