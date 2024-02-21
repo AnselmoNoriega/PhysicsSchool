@@ -13,7 +13,7 @@
 #include "Systems/Components.h"
 
 #include "DearImGui/imgui.h"
-#include "Collision.h"
+#include "Systems/Collision.h"
 
 namespace jm
 {
@@ -128,7 +128,7 @@ namespace jm
 
 			InputUpdate();
 			
-			Colliders = build_collider(registry);
+			Colliders = jm::build_coliders(registry);
 
 			if (Simulating && Controller.ShouldTickThisFrame())
 			{
@@ -163,14 +163,14 @@ namespace jm
 
 					ImGui::Text("Entities");
 					ImGui::Text("Count = %d", registry.storage<Entity_id>().in_use());
-					if (SelectedEntity.has_value())
+					/*if (SelectedEntity.has_value())
 					{
 						ImGui::Text("Selected = %d", get_entity_id_raw(SelectedEntity.value().Entity));
 					}
 					else
 					{
 						ImGui::Text("Selected = null");
-					}
+					}*/
 					ImGui::End();
 				});
 
