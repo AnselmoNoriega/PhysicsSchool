@@ -137,7 +137,7 @@ namespace jm
 			uSize fps = Controller.GetFPS();
 
 
-			GraphicsSystem.Draw3D(Camera, GraphicsSystem.ClearColour, [this, fps]()
+			GraphicsSystem.Draw3D(Camera, [this, fps]()
 				{
 					ImGui::Begin("Data");
 					ImGui::Text("FPS = %d", fps);

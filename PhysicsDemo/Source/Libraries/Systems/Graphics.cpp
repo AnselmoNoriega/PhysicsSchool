@@ -3,8 +3,9 @@
 #include "Platform/WindowedApplication.h"
 #include "Visual/DearImGui/ImGuiContext.h"
 #include "Visual/VisualGeometry.h"
+
+#include "Imgui.h"
 #include "Components.h"
-#include "imgui.h"
 
 namespace jm::System
 {
@@ -38,7 +39,7 @@ namespace jm::System
 			FragColor = vec4(outColour, 1.0);
 		}
 		)"),
-		ClearColour({ 0.2f, 0.3f, 0.3f })
+		mClearColour({ 0.2f, 0.3f, 0.3f })
 	{
 		Visual::InputLayout layout{ {3, 3} };
 
@@ -76,7 +77,7 @@ namespace jm::System
 		return mRenderer.ImGuiContextPtr->GetMessageHandler();
 	}
 
-	void Graphics::Draw3D(math::camera3<f32> const& camera, math::vector3_f32 const& clearColour, std::function<void()>&& imguiFrame)
+	void Graphics::Draw3D(math::camera3<f32> const& camera, std::function<void()>&& imguiFrame)
 	{
 		auto spatial_shape_view = mRegistry.view<const spatial3_component, const shape_component>();
 
@@ -87,15 +88,15 @@ namespace jm::System
 			switch (shape)
 			{
 			case shape_component::Sphere:
-				SphereInstances.push_back(math::isometry_matrix3(spatial.position, spatial.rotation));
+				SphereInstances.push_back(math::isometry_matrix3(spatial.position, spatial.orientation));
 				break;
 			default:
-				CubeInstances.push_back(math::isometry_matrix3(spatial.position, spatial.rotation));
+				CubeInstances.push_back(math::isometry_matrix3(spatial.position, spatial.orientation));
 				break;
 			}
 		}
 
-		mRenderer.RasterizerImpl->PrepareRenderBuffer(clearColour);
+		mRenderer.RasterizerImpl->PrepareRenderBuffer(mClearColour);
 
 		mProgram.SetUniform("projectionView", camera.get_perspective_transform() * camera.get_view_transform());
 		{
@@ -128,8 +129,8 @@ namespace jm::System
 	void Graphics::ImGuiDebug()
 	{
 		ImGui::Text("Graphics");
-		ImGui::ColorEdit3("BG Colour", reinterpret_cast<f32*>(&ClearColour));
-		ImGui::Checkbox("Debug 2D", &Debug2D);
-		ImGui::Checkbox("Debug 3D", &Debug3D);
+		ImGui::ColorEdit3("BG Colour", reinterpret_cast<f32*>(&mClearColour));
+		ImGui::Checkbox("Debug 2D", &mDebug2D);
+		ImGui::Checkbox("Debug 3D", &mDebug3D);
 	}
 }

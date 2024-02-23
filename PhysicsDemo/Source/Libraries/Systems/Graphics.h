@@ -1,7 +1,9 @@
 #pragma once
+
 #include "Visual/RenderingContext.h"
 #include "Visual/Visual.h"
 #include "Math/Camera.h"
+
 #include "Entity.h"
 
 namespace jm
@@ -23,11 +25,7 @@ namespace jm::System
 		Platform::MessageHandler* GetMessageHandler();
 		void ImGuiDebug();
 
-		void Draw3D(math::camera3<f32> const& camera, math::vector3_f32 const& clearColour, std::function<void()>&& imguiFrame);
-
-		math::vector3_f32 ClearColour;
-		bool Debug3D = true;
-		bool Debug2D = false;
+		void Draw3D(math::camera3<f32> const& camera, std::function<void()>&& imguiFrame);
 
 	private:
 		Rendering::Context mRenderer;
@@ -39,5 +37,9 @@ namespace jm::System
 		GLsizei cubeVertices;
 		GLsizei sphereVertices;
 		GLsizei axesVertices;
+
+		math::vector3_f32 mClearColour;
+		bool mDebug3D = true;
+		bool mDebug2D = false;
 	};
 }
