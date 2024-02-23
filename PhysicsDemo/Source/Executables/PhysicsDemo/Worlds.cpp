@@ -12,6 +12,7 @@ namespace jm
 		Entity_id e = registry.create();
 		registry.emplace<spatial3_component>(e,position, rotation);
 		registry.emplace<shape_component>(e, shape_component::Sphere);
+		registry.emplace<linear_body3_component>(e, math::zero3, 2.0f);
 	}
 
 	void AddBoxEntity(Entity_registry& registry, math::vector3_f32 const& position, math::quaternion_f32 const& rotation, math::vector3_f32 const& extents = math::zero3)

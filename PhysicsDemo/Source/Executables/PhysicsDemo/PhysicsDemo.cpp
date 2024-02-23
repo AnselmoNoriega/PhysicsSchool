@@ -10,10 +10,11 @@
 
 #include "Systems/Entity.h"
 #include "Systems/Graphics.h"
+#include "Systems/Collision.h"
 #include "Systems/Components.h"
+#include "Systems/Simulation.h"
 
 #include "DearImGui/imgui.h"
-#include "Systems/Collision.h"
 
 namespace jm
 {
@@ -244,7 +245,7 @@ namespace jm
 
 		void SimulationUpdate()
 		{
-
+			integrate(registry, static_cast<f32>(LoopController::FixedTick_Period));
 		}
 
 		Entity_registry registry;
