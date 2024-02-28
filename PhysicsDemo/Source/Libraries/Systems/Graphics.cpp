@@ -225,7 +225,7 @@ namespace jm::System
 		}
 
 		{
-			ThreeDimensional.Program.SetUniform("projectionView", camera.get_orthogonal_transform() * camera.get_view_transform());
+			TwoDimensional.Program.SetUniform("projectionView", camera.get_orthogonal_transform() * camera.get_view_transform());
 
 			glBindVertexArray(static_cast<GLuint>(TwoDimensional.inputLayoutHandle));
 			GLsizei start = 0;

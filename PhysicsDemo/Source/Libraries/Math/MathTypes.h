@@ -95,6 +95,18 @@ namespace jm::math
 	using glm::angleAxis;
 
 	template <typename T>
+	matrix44<T> rotation_matrix3(quaternion<T> const& versor)
+	{
+		return glm::rotate(glm::identity<matrix44<T>>(), angle(versor), axis(versor));
+	}
+
+	template <typename T>
+	matrix33<T> diagonal_matrix3(vector3<T> const& diagonals)
+	{
+		return glm::diagonal3x3(diagonals);
+	}
+
+	template <typename T>
 	matrix33<T> scale_matrix2(vector2<T> const& scale)
 	{
 		return glm::scale(glm::identity<matrix33<T>>(), scale);

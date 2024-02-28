@@ -32,4 +32,7 @@ namespace jm
 
     using linear_body2_component = math::linear_body2<f32>;
     using linear_body3_component = math::linear_body3<f32>;
+
+    using rotational_body2_component = math::rotational_body2<f32>;
+    using rotational_body3_component = math::rotational_body3<f32>;
 }

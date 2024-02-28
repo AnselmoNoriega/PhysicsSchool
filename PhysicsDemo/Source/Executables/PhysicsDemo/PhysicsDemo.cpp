@@ -108,7 +108,7 @@ namespace jm
 			, Camera(Make3DCamera(10.0f, 45.0f, window->GetArea().GetAspectRatio()))
 			, registry()
 			, InputSystem()
-			, GraphicsSystem(*window, registry, {0.8f, 0.8f, 0.8f})
+			, GraphicsSystem(*window, registry, {0.0f, 0.0f, 0.15f})
 		{
 
 		}
