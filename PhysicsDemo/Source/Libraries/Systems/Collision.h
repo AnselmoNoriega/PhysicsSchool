@@ -5,23 +5,23 @@
 
 namespace jm
 {
-    struct SphereCollider
-    {
-        Entity_id entity;
-        math::sphere3<f32> sphere;
-    };
+	struct sphere_collider
+	{
+		Entity_id entity;
+		math::sphere3<f32> sphere;
+	};
 
-    struct BoxCollider
-    {
-        Entity_id entity;
-        math::box3<f32> box;
-    };
+	struct box_collider
+	{
+		Entity_id entity;
+		math::box3<f32> box;
+	};
 
-    struct ColliderSet
-    {
-        std::vector<SphereCollider> spheres;
-        std::vector<BoxCollider> boxes;
-    };
+	struct collider_set
+	{
+		std::vector<sphere_collider> spheres{};
+		std::vector<box_collider> boxes{};
+	};
 
     struct EntityOffset
     {
@@ -31,7 +31,7 @@ namespace jm
 
     using entity_pick = std::optional<EntityOffset>;
 
-    ColliderSet build_coliders(Entity_registry& registry);
-    entity_pick ray_cast(ColliderSet const& colliders, math::ray3<f32> const& ray);
-    void resolve_collisions(Entity_registry& registry, ColliderSet const& colliders);
+	collider_set build_coliders(Entity_registry& registry);
+    entity_pick ray_cast(collider_set const& colliders, math::ray3<f32> const& ray);
+    void resolve_collisions(Entity_registry& registry, collider_set const& colliders);
 }

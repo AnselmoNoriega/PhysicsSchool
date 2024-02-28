@@ -5,38 +5,35 @@
 
 namespace jm
 {
-    ColliderSet build_coliders(Entity_registry& registry)
+    collider_set build_coliders(Entity_registry& registry)
     {
-        auto shape_entity_view = registry.view<const shape_component, const spatial3_component>();
-
-        std::vector<SphereCollider> spheres;
-        std::vector<BoxCollider> boxes;
-
-        for (auto&& [entity, shape, spatial] : shape_entity_view.each())
+        std::vector<sphere_collider> spheres;
+        std::vector<box_collider> boxes;
         {
-            switch (shape)
+            auto sphere_entity_view = registry.view<const sphere_shape_component, const spatial3_component>();
+            spheres.reserve(sphere_entity_view.size_hint());
+            for (auto&& [entity, shape, spatial] : sphere_entity_view.each())
             {
-            case shape_component::Sphere:
-                spheres.push_back({ entity, math::sphere3{spatial.position, 1.0f} });
-                break;
-            default:
-                boxes.push_back({ entity, math::box3{
-                    spatial.position,
-                    math::vector3_f32{1.0f},
-                    math::quat_to_mat(spatial.orientation)} });
-                break;
+                spheres.push_back({ entity, math::sphere3<f32>{spatial.position, shape.radius} });
             }
         }
-
-        return{ spheres, boxes };
+        {
+            auto box_entity_view = registry.view<const box_shape_component, const spatial3_component>();
+            boxes.reserve(box_entity_view.size_hint());
+            for (auto&& [entity, shape, spatial] : box_entity_view.each())
+            {
+                boxes.push_back({ entity, math::box3<f32>{spatial.position, shape.extents, math::quat_to_mat(spatial.orientation)} });
+            }
+        }
+        return { spheres, boxes };
     }
 
-    entity_pick ray_cast(ColliderSet const& colliders, math::ray3<f32> const& ray)
+    entity_pick ray_cast(collider_set const& colliders, math::ray3<f32> const& ray)
     {
         f32 t_min = std::numeric_limits<f32>::infinity();
         Entity_id entity_closest = Null_entity_id;
         math::vector3_f32 offset{};
-        for (SphereCollider const& collider: colliders.spheres)
+        for (sphere_collider const& collider: colliders.spheres)
         {
             f32 t_intersect = std::numeric_limits<f32>::infinity();
             if (math::intersect(collider.sphere, ray, t_intersect) && t_intersect < t_min)
@@ -60,7 +57,7 @@ namespace jm
         return std::nullopt;
     }
 
-    void resolve_collisions(Entity_registry& registry, ColliderSet const& colliders)
+    void resolve_collisions(Entity_registry& registry, collider_set const& colliders)
     {
         registry;
 

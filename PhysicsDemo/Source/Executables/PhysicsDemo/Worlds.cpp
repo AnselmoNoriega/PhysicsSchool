@@ -11,7 +11,7 @@ namespace jm
 	{
 		Entity_id e = registry.create();
 		registry.emplace<spatial3_component>(e,position, rotation);
-		registry.emplace<shape_component>(e, shape_component::Sphere);
+		registry.emplace<sphere_shape_component>(e, 1.0f);
 		registry.emplace<linear_body3_component>(e, math::zero3, 2.0f);
 	}
 
@@ -20,7 +20,7 @@ namespace jm
 		extents;
 		Entity_id e = registry.create();
 		registry.emplace<spatial3_component>(e, position, rotation);
-		registry.emplace<shape_component>(e, shape_component::Box);
+		registry.emplace<box_shape_component>(e, math::vector3_f32{ 1.0f, 1.0f, 1.0f });
 		registry.emplace<linear_body3_component>(e, math::zero3, 2.0f);
 	}
 

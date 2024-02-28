@@ -5,6 +5,7 @@
 #define GLM_FORCE_SILENT_WARNINGS
 
 #include "glm/glm.hpp"
+#include "glm/gtx/matrix_transform_2d.hpp"
 #include "glm/gtx/matrix_operation.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/ext/matrix_clip_space.hpp"
@@ -93,6 +94,42 @@ namespace jm::math
 	using glm::axis;
 	using glm::angleAxis;
 
+	template <typename T>
+	matrix33<T> scale_matrix2(vector2<T> const& scale)
+	{
+		return glm::scale(glm::identity<matrix33<T>>(), scale);
+	}
+
+	template <typename T>
+	matrix33<T> scale_matrix2(T scale)
+	{
+		return scale_matrix2(vector2<T>{scale});
+	}
+
+	template <typename T>
+	matrix44<T> scale_matrix3(vector3<T> const& scale)
+	{
+		return glm::scale(glm::identity<matrix44<T>>(), scale);
+	}
+
+	template <typename T>
+	matrix44<T> scale_matrix3(T scale)
+	{
+		return scale_matrix3(vector3<T>{scale});
+	}
+
+	template <typename T>
+	matrix33<T> translation_matrix2(vector2<T> const& translation)
+	{
+		return glm::translate(glm::identity<matrix33<T>>(), translation);
+	}
+
+	template <typename T>
+	matrix33<T> isometry_matrix2(vector2<T> const& translation, T angleRadians)
+	{
+		return glm::rotate(translation_matrix2(translation), angleRadians);
+	}
+
 	template<typename T>
 	vector3<T> cartesian_from_spherical(T radius, T theta, T phi)
 	{
@@ -144,8 +181,13 @@ namespace jm::math
 	template<typename T>
 	matrix44<T> isometry_matrix3(vector3<T> const& translation, quaternion<T> const& rotation)
 	{
-		matrix44<T> rotationMatrix = glm::mat3_cast(rotation);
-		return glm::translate(rotationMatrix, translation);
+		return glm::rotate(translation_matrix3(translation), angle(rotation), axis(rotation));
+	}
+
+	template<typename T>
+	matrix44<T> isometry_matrix3(vector3<T> const& translation, T angle_radians, vector3<T> const& rotation_axis)
+	{
+		return glm::rotate(translation_matrix3(translation), angle_radians, rotation_axis);
 	}
 
 	template<typename T>
