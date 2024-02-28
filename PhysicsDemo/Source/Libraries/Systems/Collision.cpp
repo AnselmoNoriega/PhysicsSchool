@@ -1,4 +1,5 @@
 #include "Collision.h"
+#include "Entity.h"
 #include "Components.h"
 #include "Math/Geometry.h"
 
@@ -33,12 +34,12 @@ namespace jm
     entity_pick ray_cast(ColliderSet const& colliders, math::ray3<f32> const& ray)
     {
         f32 t_min = std::numeric_limits<f32>::infinity();
-        Entity_id entity_closest = null_entity_id;
+        Entity_id entity_closest = Null_entity_id;
         math::vector3_f32 offset{};
         for (SphereCollider const& collider: colliders.spheres)
         {
             f32 t_intersect = std::numeric_limits<f32>::infinity();
-            if (math::intersects(collider.sphere, ray, t_intersect) && t_intersect < t_min)
+            if (math::intersect(collider.sphere, ray, t_intersect) && t_intersect < t_min)
             {
                 entity_closest = collider.entity;
                 t_min = t_intersect;
@@ -46,12 +47,12 @@ namespace jm
             }
         }
 
-        for (SphereCollider const& collider : colliders.boxes)
+        /*for (SphereCollider const& collider : colliders.spheres)
         {
 
-        }
+        }*/
 
-        if (entity_closest != null_entity_id)
+        if (entity_closest != Null_entity_id)
         {
             return EntityOffset{entity_closest, offset};
         }

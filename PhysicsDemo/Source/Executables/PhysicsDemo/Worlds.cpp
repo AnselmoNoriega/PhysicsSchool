@@ -21,6 +21,7 @@ namespace jm
 		Entity_id e = registry.create();
 		registry.emplace<spatial3_component>(e, position, rotation);
 		registry.emplace<shape_component>(e, shape_component::Box);
+		registry.emplace<linear_body3_component>(e, math::zero3, 2.0f);
 	}
 
 	void CreateBasicWorld(Entity_registry& registry)

@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h"
+#include "Geometry.h"
 #include <optional>
 
 namespace jm
@@ -24,7 +25,7 @@ namespace jm
 
     struct EntityOffset
     {
-        Entity_id null_entity_id;
+        Entity_id entity_id = Null_entity_id;
         math::vector3_f32 offset{};
     };
 
