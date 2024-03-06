@@ -5,6 +5,8 @@
 
 #include "Math/Camera.h"
 
+#include "Visual/FrameBuffer.h"
+
 #include "Entity.h"
 
 namespace jm
@@ -48,6 +50,7 @@ namespace jm::System
 		Entity_registry& EntityRegistry;
 		Data2D TwoDimensional;
 		Data3D ThreeDimensional;
+		FrameBuffer FB;
 
 		math::vector3_f32 ClearColour;
 		bool Debug2D = false;

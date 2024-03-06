@@ -188,6 +188,8 @@ set( VisualSourceList
 "${VISUAL_MODULE_DIR}/Visual.h"
 "${VISUAL_MODULE_DIR}/VisualGeometry.h"
 "${VISUAL_MODULE_DIR}/VisualGeometry.cpp"
+"${VISUAL_MODULE_DIR}/FrameBuffer.h"
+"${VISUAL_MODULE_DIR}/FrameBuffer.cpp"
 "${VISUAL_MODULE_DIR}/VisualDebug.h"
 "${VISUAL_MODULE_DIR}/MeshData.cpp"
 )

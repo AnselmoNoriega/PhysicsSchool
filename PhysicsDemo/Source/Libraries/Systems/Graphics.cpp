@@ -69,6 +69,7 @@ namespace jm::System
 				outColour = inColour;
 			}
 			)", pixelShader)
+		, FB(Renderer, window.GetArea().Width, window.GetArea().Height,"", "")
 		, ClearColour(clearColour)
 	{
 		{
@@ -190,6 +191,9 @@ namespace jm::System
 			}
 		}
 
+
+		//bind framebuffer
+
 		Renderer.RasterizerImpl->PrepareRenderBuffer(ClearColour);
 
 		{
@@ -248,6 +252,14 @@ namespace jm::System
 				glDrawArrays(GL_LINES, start, TwoDimensional.axesVertices);
 			}
 		}
+
+		//unbind FB
+
+		//set FB shader to active 
+		// bind inputlayout
+		//set as texture from FB
+
+
 
 		Renderer.ImGuiContextPtr->RunFrame(std::move(imguiFrame));
 		
