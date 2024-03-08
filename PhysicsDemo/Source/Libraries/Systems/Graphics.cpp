@@ -69,8 +69,8 @@ namespace jm::System
 				outColour = inColour;
 			}
 			)", pixelShader)
-		, FB(Renderer, (int)window.GetArea().Width, (int)window.GetArea().Height,R"(
-		    #version 330 core
+		, FB(Renderer, (int)window.GetArea().Width, (int)window.GetArea().Height
+			,R"(#version 330 core
 		    
 		    layout(location = 0) in vec2 _pos;
 		    layout(location = 1) in vec2 _texCoords;
@@ -79,11 +79,11 @@ namespace jm::System
 		    
 		    void main()
 		    {
-		        gl_Position = vec4(_pos.x, _pos.y, 0.0, 1.0);
 		        textureCoord = _texCoords;
+		        gl_Position = vec4(_pos.xy, 0.0, 1.0);
 		    };
-		    )", R"(
-			#version 330 core 
+		    )", 
+			R"(#version 330 core 
 			
 			out vec4 FragColor;
 			
@@ -103,9 +103,9 @@ namespace jm::System
 			
 			float kernel[9] = float[]
 			(
-			     2,  2,  2,
-			     1, -8,  1,
-			     1,  0,  0
+			     0, 0,  0,
+			     0, 1,  0,
+			     0, 0,  0
 			);
 			
 			void main()
@@ -114,8 +114,8 @@ namespace jm::System
 			    for (int i = 0; i < 9; i++)
 			    {
 			        color += vec3(texture(screenTexture, textureCoord.st + offsets[i])) * kernel[i];
-			        FragColor = vec4(color, 1.0f);
 			    }
+			    FragColor = vec4(color, 1.0f);
 			
 			})")
 		, ClearColour(clearColour)
@@ -242,6 +242,7 @@ namespace jm::System
 		FB.Bind();
 
 		Renderer.RasterizerImpl->PrepareRenderBuffer(ClearColour);
+		glEnable(GL_DEPTH_TEST);
 
 		{
 			ThreeDimensional.Program.MakeActive();

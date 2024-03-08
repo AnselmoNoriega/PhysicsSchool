@@ -8,25 +8,26 @@ FrameBuffer::FrameBuffer(jm::Rendering::Context& renderer, int winWidth, int win
 	{
 		 1.0f, -1.0f,    1.0f, 0.0f,
 		-1.0f, -1.0f,    0.0f, 0.0f,
-		-1.0f,  1.0f,    0.0f, 1.0f,
+		-1.0f,  1.0f,	 0.0f, 1.0f,
 
-		 1.0f,  1.0f,	1.0f, 1.0f,
-		 1.0f, -1.0f,	1.0f, 0.0f,
-		-1.0f,  1.0f,	0.0f, 1.0f
+		 1.0f,  1.0f,	 1.0f, 1.0f,
+		 1.0f, -1.0f,	 1.0f, 0.0f,
+		-1.0f,  1.0f,	 0.0f, 1.0f
 	};
-
 
 	std::vector<std::byte> frameRec((std::byte*)&rectangleVertices, (std::byte*)&rectangleVertices + sizeof(rectangleVertices));
 	Visual::RawBuffer vertexBufferData{ frameRec , 6 };
 
 	mProgram.MakeActive();
 	mProgram.SetUniform("screenTexture", 0);
+
 	jm::Visual::InputLayout layout{ {2, 2 } };
 	mInputLayout = renderer.RasterizerMemory->createInputLayout(layout);
 	mInputBuffer = renderer.RasterizerMemory->createInputBuffer(mInputLayout, vertexBufferData.data);
+	glBindVertexArray(static_cast<GLuint>(mInputLayout));
 
 	glGenFramebuffers(1, &mFrameBufferID);
-	Bind();
+	glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferID);
 
 	glGenTextures(1, &mTextureID);
 	glBindTexture(GL_TEXTURE_2D, mTextureID);
@@ -59,12 +60,10 @@ void FrameBuffer::Update()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	mProgram.MakeActive();
-	glBindBuffer(GL_VERTEX_ARRAY, static_cast<GLuint>(mInputLayout));
+	glBindVertexArray(static_cast<GLuint>(mInputLayout));
 
 	glDisable(GL_DEPTH_TEST);
 
 	glBindTexture(GL_TEXTURE_2D, mTextureID);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
-
-	glEnable(GL_DEPTH_TEST);
 }
