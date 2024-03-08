@@ -1,7 +1,5 @@
 #include "FrameBuffer.h"
 
-#include "Visual/RenderingContext.h"
-
 FrameBuffer::FrameBuffer(jm::Rendering::Context& renderer, int winWidth, int winHeight, const char* vertexShader, const char* fragmentShader)
 	: mProgram(vertexShader, fragmentShader)
 {
@@ -22,30 +20,51 @@ FrameBuffer::FrameBuffer(jm::Rendering::Context& renderer, int winWidth, int win
 	Visual::RawBuffer vertexBufferData{ frameRec , 6 };
 
 	mProgram.MakeActive();
-	mProgram.SetUniform("uTexture", 0);
+	mProgram.SetUniform("screenTexture", 0);
 	jm::Visual::InputLayout layout{ {2, 2 } };
 	mInputLayout = renderer.RasterizerMemory->createInputLayout(layout);
 	mInputBuffer = renderer.RasterizerMemory->createInputBuffer(mInputLayout, vertexBufferData.data);
 
 	glGenFramebuffers(1, &mFrameBufferID);
-	glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferID);
-	// vao static_cast<GLuint>(mInputLayout)
-	unsigned int frameTexture;
-	glGenTextures(1, &frameTexture);
-	glBindTexture(GL_TEXTURE_2D, frameTexture);
+	Bind();
 
+	glGenTextures(1, &mTextureID);
+	glBindTexture(GL_TEXTURE_2D, mTextureID);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, winWidth, winHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTextureID, 0);
 
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, frameTexture, 0);
+	unsigned int RB;
+	glGenRenderbuffers(1, &RB);
+	glBindRenderbuffer(GL_RENDERBUFFER, RB);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, winWidth, winHeight);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RB);
+
+	auto FbStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+	if (FbStatus != GL_FRAMEBUFFER_COMPLETE)
+	{
+		//std::cout << "FrameBuffer ERROR = " << FbStatus << std::endl;
+	}
 }
 
 void FrameBuffer::Bind()
 {
+	glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferID);
 }
 
 void FrameBuffer::Update()
 {
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	mProgram.MakeActive();
+	glBindBuffer(GL_VERTEX_ARRAY, static_cast<GLuint>(mInputLayout));
+
+	glDisable(GL_DEPTH_TEST);
+
+	glBindTexture(GL_TEXTURE_2D, mTextureID);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	glEnable(GL_DEPTH_TEST);
 }

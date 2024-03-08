@@ -3,10 +3,8 @@
 #include "OpenGL/OpenGL.h"
 #include "Visual.h"
 
-namespace jm
-{
-	struct Rendering::Context;
-}
+#include "Visual/RenderingContext.h"
+
 
 class FrameBuffer
 {
@@ -26,5 +24,6 @@ private:
 	int mWindowHeight;
 
 	unsigned int mFrameBufferID;
+	unsigned int mTextureID;
 };
 

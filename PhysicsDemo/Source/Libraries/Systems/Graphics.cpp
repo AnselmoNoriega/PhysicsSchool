@@ -69,7 +69,55 @@ namespace jm::System
 				outColour = inColour;
 			}
 			)", pixelShader)
-		, FB(Renderer, window.GetArea().Width, window.GetArea().Height,"", "")
+		, FB(Renderer, (int)window.GetArea().Width, (int)window.GetArea().Height,R"(
+		    #version 330 core
+		    
+		    layout(location = 0) in vec2 _pos;
+		    layout(location = 1) in vec2 _texCoords;
+		    
+		    out vec2 textureCoord;
+		    
+		    void main()
+		    {
+		        gl_Position = vec4(_pos.x, _pos.y, 0.0, 1.0);
+		        textureCoord = _texCoords;
+		    };
+		    )", R"(
+			#version 330 core 
+			
+			out vec4 FragColor;
+			
+			in vec2 textureCoord;
+			
+			uniform sampler2D screenTexture;
+			
+			const float offset_x = 1.0f / 800.0f;
+			const float offset_y = 1.0f / 800.0f;
+			
+			vec2 offsets[9] = vec2[]
+			(
+			    vec2(-offset_x, offset_y), vec2(0.0f,  offset_y), vec2(offset_x, offset_y),
+			    vec2(-offset_x,     0.0f), vec2(0.0f,      0.0f), vec2(offset_x,     0.0f),
+			    vec2(-offset_x, offset_y), vec2(0.0f, -offset_y), vec2(offset_x, -offset_y)
+			);
+			
+			float kernel[9] = float[]
+			(
+			     2,  2,  2,
+			     1, -8,  1,
+			     1,  0,  0
+			);
+			
+			void main()
+			{
+			    vec3 color = vec3(0.0f);
+			    for (int i = 0; i < 9; i++)
+			    {
+			        color += vec3(texture(screenTexture, textureCoord.st + offsets[i])) * kernel[i];
+			        FragColor = vec4(color, 1.0f);
+			    }
+			
+			})")
 		, ClearColour(clearColour)
 	{
 		{
@@ -191,8 +239,7 @@ namespace jm::System
 			}
 		}
 
-
-		//bind framebuffer
+		FB.Bind();
 
 		Renderer.RasterizerImpl->PrepareRenderBuffer(ClearColour);
 
@@ -253,13 +300,7 @@ namespace jm::System
 			}
 		}
 
-		//unbind FB
-
-		//set FB shader to active 
-		// bind inputlayout
-		//set as texture from FB
-
-
+		FB.Update();
 
 		Renderer.ImGuiContextPtr->RunFrame(std::move(imguiFrame));
 		
