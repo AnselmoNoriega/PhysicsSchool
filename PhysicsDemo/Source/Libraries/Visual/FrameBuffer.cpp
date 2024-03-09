@@ -7,13 +7,13 @@ FrameBuffer::FrameBuffer(jm::Rendering::Context& renderer, int winWidth, int win
 	using namespace jm;
 	float rectangleVertices[] =
 	{
-		 1.0f, -1.0f,    1.0f, 0.0f,
-		-1.0f, -1.0f,    0.0f, 0.0f,
 		-1.0f,  1.0f,	 0.0f, 1.0f,
-
-		 1.0f,  1.0f,	 1.0f, 1.0f,
 		 1.0f, -1.0f,	 1.0f, 0.0f,
-		-1.0f,  1.0f,	 0.0f, 1.0f
+		 1.0f,  1.0f,	 1.0f, 1.0f,
+
+		-1.0f,  1.0f,	 0.0f, 1.0f,
+		-1.0f, -1.0f,    0.0f, 0.0f,
+		 1.0f, -1.0f,    1.0f, 0.0f
 	};
 
 	std::vector<std::byte> frameRec((std::byte*)&rectangleVertices, (std::byte*)&rectangleVertices + sizeof(rectangleVertices));
