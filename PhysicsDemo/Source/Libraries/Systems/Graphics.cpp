@@ -143,26 +143,38 @@ namespace jm::System
                 }
                 else if(shapeType == 1.0f)
                 {
+                    FragColor = vec4(1.0f) - texture(screenTexture, textureCoord);
+                    return;
+                }
+                else if(shapeType == 2.0f)
+                {
+                    vec4 texCol = texture(screenTexture, textureCoord);
+                    float avg = (texCol.x + texCol.y + texCol.z) / 3.0f;
+                    FragColor = vec4(avg, avg, avg, 1.0f);
+                    return;
+                }
+                else if(shapeType == 3.0f)
+                {
 			        for (int i = 0; i < 9; i++)
 			        {
 			            color += vec3(texture(screenTexture, textureCoord.st + offsets[i])) * boxBlur[i];
 			        }
                 }
-                else if(shapeType == 2.0f)
+                else if(shapeType == 4.0f)
                 {
 			        for (int i = 0; i < 9; i++)
 			        {
 			            color += vec3(texture(screenTexture, textureCoord.st + offsets[i])) * gaussianBlur[i];
 			        }
                 }
-                else if(shapeType == 3.0f)
+                else if(shapeType == 5.0f)
                 {
 			        for (int i = 0; i < 9; i++)
 			        {
 			            color += vec3(texture(screenTexture, textureCoord.st + offsets[i])) * ridge[i];
 			        }
                 }
-                else if(shapeType == 4.0f)
+                else if(shapeType == 6.0f)
                 {
 			        for (int i = 0; i < 9; i++)
 			        {
@@ -370,9 +382,9 @@ namespace jm::System
 
         if (ImGui::CollapsingHeader("Post-processing Info", ImGuiTreeNodeFlags_DefaultOpen))
         {
-            ImGui::Combo("Effects", &FB.GetEffectType(), FB.GetEffectNames(), 5);
+            ImGui::Combo("Effects", &FB.GetEffectType(), FB.GetEffectNames(), 7);
 
-            if (FB.GetEffectType() > 0 && ImGui::CollapsingHeader("Effect Info", ImGuiTreeNodeFlags_DefaultOpen))
+            if (FB.GetEffectType() > 2 && ImGui::CollapsingHeader("Effect Info", ImGuiTreeNodeFlags_DefaultOpen))
             {
                 ImGui::DragFloat("Strength", &FB.GetBlurStrength(), 10.0f, 30.0f, 1000.0f);
             }
