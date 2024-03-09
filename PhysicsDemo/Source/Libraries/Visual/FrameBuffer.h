@@ -16,6 +16,8 @@ public:
 	void Update();
 
 	float& GetBlurStrength() { return blurStrength; };
+	int& GetEffectType() { return effectType; };
+	const char** GetEffectNames() { return EffectNames; };
 
 private:
 	jm::Visual::ShaderProgram mProgram;
@@ -26,5 +28,12 @@ private:
 	unsigned int mTextureID;
 
 	float blurStrength = 1000;
+
+	int effectType = 0;
+
+	const char* EffectNames[2] = {
+		"None",
+		"Box blur"
+	};
 };
 

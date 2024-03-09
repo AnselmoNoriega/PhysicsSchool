@@ -62,6 +62,7 @@ void FrameBuffer::Update()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	mProgram.MakeActive();
 	mProgram.SetUniform("divideOffset", blurStrength);
+	mProgram.SetUniform("shapeType", (float)effectType);
 	glBindVertexArray(static_cast<GLuint>(mInputLayout));
 
 	glDisable(GL_DEPTH_TEST);
