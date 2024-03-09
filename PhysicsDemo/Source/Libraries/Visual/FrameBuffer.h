@@ -20,9 +20,6 @@ private:
 	jm::OpenGL::InputLayoutHandle mInputLayout;
 	jm::OpenGL::InputBufferHandle mInputBuffer;
 
-	int mWindowWidth;
-	int mWindowHeight;
-
 	unsigned int mFrameBufferID;
 	unsigned int mTextureID;
 };

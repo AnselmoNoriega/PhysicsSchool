@@ -272,9 +272,7 @@ namespace jm::System
 			}
 		}
 
-
 		{
-
 			TwoDimensional.Program.MakeActive();
 			glBindVertexArray(static_cast<GLuint>(TwoDimensional.inputLayoutHandle));
 			TwoDimensional.Program.SetUniform("view", math::scale_matrix2(0.1f) * math::matrix33_f32(camera.get_orthogonal_transform()));

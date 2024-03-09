@@ -1,4 +1,5 @@
 #include "FrameBuffer.h"
+#include <iostream>
 
 FrameBuffer::FrameBuffer(jm::Rendering::Context& renderer, int winWidth, int winHeight, const char* vertexShader, const char* fragmentShader)
 	: mProgram(vertexShader, fragmentShader)
@@ -47,7 +48,7 @@ FrameBuffer::FrameBuffer(jm::Rendering::Context& renderer, int winWidth, int win
 	auto FbStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	if (FbStatus != GL_FRAMEBUFFER_COMPLETE)
 	{
-		//std::cout << "FrameBuffer ERROR = " << FbStatus << std::endl;
+		std::cout << "FrameBuffer ERROR = " << FbStatus << std::endl;
 	}
 }
 
