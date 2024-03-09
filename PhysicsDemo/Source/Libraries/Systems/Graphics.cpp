@@ -132,6 +132,13 @@ namespace jm::System
 			     0.0f,-1.0f,  0.0f
 			);
 			
+			float embossing[9] = float[]
+			(
+			     -1.0f, 0.0f, 0.0f,
+			      0.0f, 0.0f, 0.0f,
+			      0.0f, 0.0f, 1.0f
+			);
+			
 			void main()
 			{
 			    vec3 color = vec3(0.0f);
@@ -179,6 +186,13 @@ namespace jm::System
 			        for (int i = 0; i < 9; i++)
 			        {
 			            color += vec3(texture(screenTexture, textureCoord.st + offsets[i])) * sharpen[i];
+			        }
+                }
+                else if(shapeType == 7.0f)
+                {
+			        for (int i = 0; i < 9; i++)
+			        {
+			            color += vec3(texture(screenTexture, textureCoord.st + offsets[i])) * embossing[i];
 			        }
                 }
 
@@ -382,7 +396,7 @@ namespace jm::System
 
         if (ImGui::CollapsingHeader("Post-processing Info", ImGuiTreeNodeFlags_DefaultOpen))
         {
-            ImGui::Combo("Effects", &FB.GetEffectType(), FB.GetEffectNames(), 7);
+            ImGui::Combo("Effects", &FB.GetEffectType(), FB.GetEffectNames(), 8);
 
             if (FB.GetEffectType() > 2 && ImGui::CollapsingHeader("Effect Info", ImGuiTreeNodeFlags_DefaultOpen))
             {

@@ -31,14 +31,15 @@ private:
 
 	int effectType = 0;
 
-	const char* EffectNames[7] = {
+	const char* EffectNames[8] = {
 		"None",
 		"Invert Color",
 		"Black & White",
 		"Box blur",
 		"Gaussian blur ",
 		"Edge detection",
-		"Sharpen"
+		"Sharpen",
+		"Embossing"
 	};
 };
 
