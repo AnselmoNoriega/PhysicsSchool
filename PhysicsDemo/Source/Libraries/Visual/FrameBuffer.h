@@ -15,6 +15,8 @@ public:
 
 	void Update();
 
+	float& GetBlurStrength() { return blurStrength; };
+
 private:
 	jm::Visual::ShaderProgram mProgram;
 	jm::OpenGL::InputLayoutHandle mInputLayout;
@@ -22,5 +24,7 @@ private:
 
 	unsigned int mFrameBufferID;
 	unsigned int mTextureID;
+
+	float blurStrength = 1000;
 };
 

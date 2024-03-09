@@ -91,8 +91,10 @@ namespace jm::System
 			
 			uniform sampler2D screenTexture;
 			
-			const float offset_x = 1.0f / 800.0f;
-			const float offset_y = 1.0f / 800.0f;
+			uniform float divideOffset = 800.0f;
+
+			float offset_x = 1.0f / divideOffset;
+			float offset_y = 1.0f / divideOffset;
 			
 			vec2 offsets[9] = vec2[]
 			(
@@ -101,11 +103,11 @@ namespace jm::System
 			    vec2(-offset_x, offset_y), vec2(0.0f, -offset_y), vec2(offset_x, -offset_y)
 			);
 			
-			float kernel[9] = float[]
+			float boxBlur[9] = float[]
 			(
-			     0, 0,  0,
-			     0, 1,  0,
-			     0, 0,  0
+			     0.1f, 0.1f,  0.1f,
+			     0.1f, 0.1f,  0.1f,
+			     0.1f, 0.1f,  0.1f
 			);
 			
 			void main()
@@ -113,7 +115,7 @@ namespace jm::System
 			    vec3 color = vec3(0.0f);
 			    for (int i = 0; i < 9; i++)
 			    {
-			        color += vec3(texture(screenTexture, textureCoord.st + offsets[i])) * kernel[i];
+			        color += vec3(texture(screenTexture, textureCoord.st + offsets[i])) * boxBlur[i];
 			    }
 			    FragColor = vec4(color, 1.0f);
 			
@@ -312,5 +314,10 @@ namespace jm::System
 		ImGui::ColorEdit3("BG Colour", reinterpret_cast<f32*>(&ClearColour));
 		ImGui::Checkbox("Debug 2D", &Debug2D);
 		ImGui::Checkbox("Debug 3D", &Debug3D);
+
+		if (ImGui::CollapsingHeader("Post-processing Info", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			ImGui::DragFloat("BlurStrength", &FB.GetBlurStrength(), 10.0f, 30.0f, 1000.0f);
+		}
 	}
 }
