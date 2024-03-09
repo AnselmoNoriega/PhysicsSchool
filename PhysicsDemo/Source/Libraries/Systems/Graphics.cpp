@@ -106,9 +106,30 @@ namespace jm::System
 			
 			float boxBlur[9] = float[]
 			(
-			     0.1f, 0.1f,  0.1f,
-			     0.1f, 0.1f,  0.1f,
-			     0.1f, 0.1f,  0.1f
+			     0.11f, 0.11f,  0.11f,
+			     0.11f, 0.11f,  0.11f,
+			     0.11f, 0.11f,  0.11f
+			);
+
+			float gaussianBlur[9] = float[]
+			(
+			     0.06f, 0.12f,  0.06f,
+			     0.12f, 0.25f,  0.21f,
+			     0.06f, 0.12f,  0.06f
+			);
+			
+			float ridge[9] = float[]
+			(
+			    -1.0f, -1.0f, -1.0f,
+			    -1.0f,  8.0f, -1.0f,
+			    -1.0f, -1.0f, -1.0f
+			);
+			
+			float sharpen[9] = float[]
+			(
+			     0.0f,-1.0f,  0.0f,
+			    -1.0f, 5.0f, -1.0f,
+			     0.0f,-1.0f,  0.0f
 			);
 			
 			void main()
@@ -125,6 +146,27 @@ namespace jm::System
 			        for (int i = 0; i < 9; i++)
 			        {
 			            color += vec3(texture(screenTexture, textureCoord.st + offsets[i])) * boxBlur[i];
+			        }
+                }
+                else if(shapeType == 2.0f)
+                {
+			        for (int i = 0; i < 9; i++)
+			        {
+			            color += vec3(texture(screenTexture, textureCoord.st + offsets[i])) * gaussianBlur[i];
+			        }
+                }
+                else if(shapeType == 3.0f)
+                {
+			        for (int i = 0; i < 9; i++)
+			        {
+			            color += vec3(texture(screenTexture, textureCoord.st + offsets[i])) * ridge[i];
+			        }
+                }
+                else if(shapeType == 4.0f)
+                {
+			        for (int i = 0; i < 9; i++)
+			        {
+			            color += vec3(texture(screenTexture, textureCoord.st + offsets[i])) * sharpen[i];
 			        }
                 }
 
@@ -328,20 +370,11 @@ namespace jm::System
 
         if (ImGui::CollapsingHeader("Post-processing Info", ImGuiTreeNodeFlags_DefaultOpen))
         {
-            ImGui::Combo("Effects", &FB.GetEffectType(), FB.GetEffectNames(), 2);
+            ImGui::Combo("Effects", &FB.GetEffectType(), FB.GetEffectNames(), 5);
 
-            switch (FB.GetEffectType())
+            if (FB.GetEffectType() > 0 && ImGui::CollapsingHeader("Effect Info", ImGuiTreeNodeFlags_DefaultOpen))
             {
-            case 1:
-            {
-                if (ImGui::CollapsingHeader("Blur Effect Info", ImGuiTreeNodeFlags_DefaultOpen))
-                {
-                    ImGui::DragFloat("BlurStrength", &FB.GetBlurStrength(), 10.0f, 30.0f, 1000.0f);
-                }
-                break;
-            }
-            default:
-                break;
+                ImGui::DragFloat("Strength", &FB.GetBlurStrength(), 10.0f, 30.0f, 1000.0f);
             }
         }
     }

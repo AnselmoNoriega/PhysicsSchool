@@ -31,9 +31,12 @@ private:
 
 	int effectType = 0;
 
-	const char* EffectNames[2] = {
+	const char* EffectNames[5] = {
 		"None",
-		"Box blur"
+		"Box blur",
+		"Gaussian blur ",
+		"Edge detection",
+		"Sharpen"
 	};
 };
 
