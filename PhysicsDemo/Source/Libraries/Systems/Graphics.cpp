@@ -134,6 +134,72 @@ namespace jm::System
 			      0.0f, 0.0f, 0.0f,
 			      0.0f, 0.0f, 1.0f
 			);
+
+            vec3 ChangeColorValue(vec3 color, float factor) 
+            {
+                float maxVal = max(max(color.r, color.g), color.b);
+                float minVal = min(min(color.r, color.g), color.b);
+                float delta = maxVal - minVal;
+            
+                float hue = 0.0;
+                float saturation = (maxVal > 0.0) ? (delta / maxVal) : 0.0;
+                if (delta > 0.0) 
+                {
+                    if (maxVal == color.r) 
+                    {
+                        hue = 60.0 * (color.g - color.b) / delta;
+                    } 
+                    else if (maxVal == color.g) 
+                    {
+                        hue = 60.0 * (2.0 + (color.b - color.r) / delta);
+                    } 
+                    else 
+                    {
+                        hue = 60.0 * (4.0 + (color.r - color.g) / delta);
+                    }
+
+                    if (hue < 0.0) 
+                    {
+                        hue += 360.0;
+                    }
+                }
+            
+                float value = min(maxVal + factor, 1.0);
+            
+                float c = value * saturation;
+                float x = c * (1.0 - abs(mod(hue / 60.0, 2.0) - 1.0));
+                float m = value - c;
+            
+                vec3 newColor;
+                if (hue >= 0.0 && hue < 60.0) 
+                {
+                    newColor = vec3(c, x, 0.0);
+                }
+                else if (hue >= 60.0 && hue < 120.0) 
+                {
+                    newColor = vec3(x, c, 0.0);
+                } 
+                else if (hue >= 120.0 && hue < 180.0) 
+                {
+                    newColor = vec3(0.0, c, x);
+                } 
+                else if (hue >= 180.0 && hue < 240.0) 
+                {
+                    newColor = vec3(0.0, x, c);
+                } 
+                else if (hue >= 240.0 && hue < 300.0) 
+                {
+                    newColor = vec3(x, 0.0, c);
+                } 
+                else 
+                {
+                    newColor = vec3(c, 0.0, x);
+                }
+            
+                newColor += m;
+            
+                return newColor;
+            }
 			
 			void main()
 			{
@@ -169,7 +235,8 @@ namespace jm::System
 			        {
 			            color2 += vec3(texture(screenTexture, textureCoord.st + offsets[i])) * boxBlur[i];
 			        }
-                    color = (color1 * color2) + 0.1f;
+                    color = (color1 * color2);
+                    color = ChangeColorValue(color, 0.1f);
 
                 }
                 else if(shapeType == 4.0f)
@@ -185,7 +252,8 @@ namespace jm::System
 			        {
 			            color2 += vec3(texture(screenTexture, textureCoord.st + offsets[i])) * gaussianBlur[i];
 			        }
-                    color = (color1 * color2) + 0.1f;
+                    color = (color1 * color2);
+                    color = ChangeColorValue(color, 0.1f);
                 }
                 else if(shapeType == 5.0f)
                 {
