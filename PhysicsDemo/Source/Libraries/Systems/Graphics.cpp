@@ -104,18 +104,14 @@ namespace jm::System
 			    vec2(-offset_x, offset_y), vec2(0.0f, -offset_y), vec2(offset_x, -offset_y)
 			);
 			
-			float boxBlur[9] = float[]
+			float boxBlur[3] = float[]
 			(
-			     0.11f, 0.11f,  0.11f,
-			     0.11f, 0.11f,  0.11f,
-			     0.11f, 0.11f,  0.11f
+			     0.33f, 0.33f, 0.33f
 			);
 
-			float gaussianBlur[9] = float[]
+			float gaussianBlur[3] = float[]
 			(
-			     0.06f, 0.12f,  0.06f,
-			     0.12f, 0.25f,  0.21f,
-			     0.06f, 0.12f,  0.06f
+			     0.25f, 0.5f,  0.25f
 			);
 			
 			float ridge[9] = float[]
@@ -162,17 +158,34 @@ namespace jm::System
                 }
                 else if(shapeType == 3.0f)
                 {
-			        for (int i = 0; i < 9; i++)
+			        vec3 color1 = vec3(0.0f);
+			        for (int i = 0; i < 3; i++)
 			        {
-			            color += vec3(texture(screenTexture, textureCoord.st + offsets[i])) * boxBlur[i];
+			            color1 += vec3(texture(screenTexture, textureCoord.st + offsets[i])) * boxBlur[i];
 			        }
+
+			        vec3 color2 = vec3(0.0f);
+			        for (int i = 0; i < 3; i++)
+			        {
+			            color2 += vec3(texture(screenTexture, textureCoord.st + offsets[i])) * boxBlur[i];
+			        }
+                    color = (color1 * color2) + 0.1f;
+
                 }
                 else if(shapeType == 4.0f)
                 {
-			        for (int i = 0; i < 9; i++)
+			        vec3 color1 = vec3(0.0f);
+			        for (int i = 0; i < 3; i++)
 			        {
-			            color += vec3(texture(screenTexture, textureCoord.st + offsets[i])) * gaussianBlur[i];
+			            color1 += vec3(texture(screenTexture, textureCoord.st + offsets[i])) * gaussianBlur[i];
 			        }
+
+			        vec3 color2 = vec3(0.0f);
+			        for (int i = 0; i < 3; i++)
+			        {
+			            color2 += vec3(texture(screenTexture, textureCoord.st + offsets[i])) * gaussianBlur[i];
+			        }
+                    color = (color1 * color2) + 0.1f;
                 }
                 else if(shapeType == 5.0f)
                 {
