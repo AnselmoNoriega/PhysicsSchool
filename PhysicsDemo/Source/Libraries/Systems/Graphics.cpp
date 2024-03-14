@@ -104,9 +104,9 @@ namespace jm::System
 			    vec2(-offset_x, offset_y), vec2(0.0f, -offset_y), vec2(offset_x, -offset_y)
 			);
 			
-			float boxBlur[3] = float[]
+			float boxBlur[7] = float[]
 			(
-			     0.33f, 0.33f, 0.33f
+			     0.06f, 0.13f, 0.19f, 0.25f, 0.19f, 0.13f, 0.06f
 			);
 
 			float gaussianBlur[3] = float[]
@@ -224,19 +224,22 @@ namespace jm::System
                 }
                 else if(shapeType == 3.0f)
                 {
+                    vec2 offset;
 			        vec3 color1 = vec3(0.0f);
-			        for (int i = 0; i < 3; i++)
+			        for (int i = -3; i <= 3; i++)
 			        {
-			            color1 += vec3(texture(screenTexture, textureCoord.st + offsets[i])) * boxBlur[i];
+                        offset = vec2(offset_x * i, 0.0f);
+			            color1 += vec3(texture(screenTexture, textureCoord.st + offset)) * boxBlur[i];
 			        }
 
 			        vec3 color2 = vec3(0.0f);
-			        for (int i = 0; i < 3; i++)
+			        for (int i = -3; i <= 3; i++)
 			        {
-			            color2 += vec3(texture(screenTexture, textureCoord.st + offsets[i])) * boxBlur[i];
+                        offset = vec2(0.0f, offset_y * i);
+			            color2 += vec3(texture(screenTexture, textureCoord.st + offset)) * boxBlur[i];
 			        }
                     color = (color1 * color2);
-                    color = ChangeColorValue(color, 0.1f);
+                    color = ChangeColorValue(color, 0.15f);
 
                 }
                 else if(shapeType == 4.0f)
