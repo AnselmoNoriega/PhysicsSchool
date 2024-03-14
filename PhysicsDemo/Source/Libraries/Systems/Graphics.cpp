@@ -239,7 +239,7 @@ namespace jm::System
 			            color2 += vec3(texture(screenTexture, textureCoord.st + offset)) * boxBlur[i];
 			        }
                     color = (color1 * color2);
-                    color = ChangeColorValue(color, 0.15f);
+                    color = ChangeColorValue(color, 0.12f);
 
                 }
                 else if(shapeType == 4.0f)
