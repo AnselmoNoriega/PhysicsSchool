@@ -253,7 +253,7 @@ namespace jm::System
 			        vec3 color2 = vec3(0.0f);
 			        for (int i = 0; i < 3; i++)
 			        {
-			            color2 += vec3(texture(screenTexture, textureCoord.st + offsets[i])) * gaussianBlur[i];
+			            color2 += vec3(texture(screenTexture, textureCoord.st + offsets[i * 3])) * gaussianBlur[i];
 			        }
                     color = (color1 * color2);
                     color = ChangeColorValue(color, 0.1f);
